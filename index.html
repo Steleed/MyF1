@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101115">
+  <meta name="description" content="L'archivio Formula 1: stagioni, piloti, scuderie e classifiche dal 1950 a oggi.">
+  <title>Formula One — Archivio F1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>if(location.protocol==='file:')document.write('<script src="static-api/local.js"><\/script>');</script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="Formula One home"><span class="brand-mark">F<span>1</span></span><span class="brand-name">FORMULA <b>ONE</b></span></a>
+    <nav aria-label="Navigazione principale"><a class="active" href="#home">Home</a><a href="#season">Stagioni</a><a href="#cars">Monoposto</a><a href="#momenti">Gare</a><a href="#legends">Piloti</a></nav>
+    <a class="live-pill" href="#season"><span></span> ARCHIVIO F1</a>
+  </header>
+  <main id="home">
+    <section class="hero" aria-label="La Formula 1, ieri e oggi">
+      <div class="hero-collage" id="heroCollage" aria-label="Monoposto, gare e piloti di Formula 1 attraverso le epoche"></div>
+      <div class="hero-shade"></div>
+      <div class="hero-copy"><div class="eyebrow"><span></span> 1950 — OGGI · OGNI EPOCA, OGNI PROTAGONISTA</div>
+        <h1>FORMULA 1<br><em>STORIE IN CORSA.</em></h1>
+        <p>Macchine leggendarie. Volti indimenticabili. Momenti al limite.</p>
+        <a class="primary-button" href="#season">ESPLORA LE STAGIONI <span>↘</span></a>
+      </div>
+      <div class="hero-side"><span>STORIA</span><i>1950</i><span>FINO A OGGI</span></div>
+      <div class="hero-caption">UN MONDO. MILLE STORIE.</div>
+      <div class="hero-bottom"><span>FORMULA 1 · DAL 1950</span><div class="hero-line"></div><span>FOTO CON CREDITI E LICENZA</span></div>
+    </section>
+
+    <section id="detailPage" class="detail-page" hidden aria-live="polite"></section>
+    <section class="intro" id="season"><div><div class="eyebrow"><span></span> L'ARCHIVIO COMPLETO</div><h2>UNA STORIA<br><em>ALLA VOLTA.</em></h2></div><p>Classifiche, piloti e scuderie di ogni stagione. Apri una scheda per trovare risultati, monoposto e dati tecnici documentati.</p></section>
+    <section class="archive-wrap" aria-label="Archivio delle stagioni"><div class="season-picker">
+      <div class="picker-label">SCEGLI LA STAGIONE</div><div class="picker-controls"><button class="arrow" id="prevYear" aria-label="Stagione precedente">←</button><label class="select-wrap"><span class="sr-only">Seleziona stagione</span><select id="seasonSelect"></select><span class="chevron">⌄</span></label><button class="arrow" id="nextYear" aria-label="Stagione successiva">→</button></div>
+      <div class="quick-years"><button data-year="2026">2026</button><button data-year="2000">2000</button><button data-year="1990">1990</button><button data-year="1970">1970</button><button data-year="1950">1950</button></div>
+      <div class="picker-foot"><span class="red-dot"></span><span id="seasonStatus">Caricamento archivio</span></div>
+    </div><div class="season-content"><div class="season-heading"><div><div class="eyebrow"><span></span> CAMPIONATO MONDIALE</div><h2>STAGIONE <em id="seasonTitle">2025</em></h2></div><div class="season-meta" id="seasonMeta">RISULTATI E CLASSIFICHE</div></div>
+      <div id="errorBox" class="notice" hidden></div>
+      <div class="tables-grid"><article class="data-card"><div class="card-heading"><div><span class="card-kicker">CAMPIONATO PILOTI</span><h3>CLASSIFICA <em>PILOTI</em></h3></div><span class="card-icon">♙</span></div><div id="driversTable" class="table-area"><div class="loading"><span class="spinner"></span>Caricamento classifica…</div></div><span class="card-link">PILOTI E RISULTATI PER GARA</span></article>
+      <article class="data-card"><div class="card-heading"><div><span class="card-kicker">ARCHIVIO COSTRUTTORI</span><h3>SCUDERIE <em>E TELAI</em></h3></div><span class="card-icon">▰</span></div><div id="constructorsTable" class="table-area"><div class="loading"><span class="spinner"></span>Caricamento archivio…</div></div><span class="card-link">SCHEDE SCUDERIE E MONOPOSTI</span></article></div>
+      <div class="season-footer"><span>DATI STORICI DAL 1950</span><span>AGGIORNATO A OGNI STAGIONE <b>●</b></span></div>
+    </div></section>
+
+    <section class="car-wall" id="cars"><div class="section-top"><div><div class="eyebrow"><span></span> PROGETTATE PER CORRERE</div><h2>LE AUTO CHE<br><em>HANNO CAMBIATO TUTTO.</em></h2></div><span class="photo-count" id="photoCount">MONOPOSTI D'OGNI EPOCA</span></div><div class="photo-rail" id="carGallery"></div><p class="photo-note">Foto: Wikimedia Commons. Credito e licenza sono indicati su ogni immagine.</p></section>
+
+    <section class="race-wall" id="momenti"><div class="section-top"><div><div class="eyebrow"><span></span> NON SOLO RISULTATI</div><h2>ISTANTI CHE<br><em>FANNO LA STORIA.</em></h2></div><span class="photo-count" id="racePhotoCount">GRANDI PREMI · 1950—OGGI</span></div><div class="photo-rail" id="raceGallery"></div><p class="photo-note">Scene di gara dall’archivio Wikimedia Commons. Credito e licenza su ogni foto.</p></section>
+
+    <section class="legends" id="legends"><div class="section-top"><div><div class="eyebrow"><span></span> I VOLTI DELLA LEGGENDA</div><h2>UOMINI, NON <em>NUMERI.</em></h2></div><a href="#season" class="text-link">CERCA UN PILOTA <span>↗</span></a></div>
+      <div class="driver-grid">
+        <a class="driver-card" href="?type=driver&id=fangio&season=1957"><img data-driver="fangio" alt="Juan Manuel Fangio" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">IL MAESTRO · 5 TITOLI</span><div class="driver-info"><span class="driver-number">01</span><h3>JUAN MANUEL<br><em>FANGIO.</em></h3><span class="driver-detail">ARGENTINA <b>↗</b></span></div></a>
+        <a class="driver-card" href="?type=driver&id=farina&season=1950"><img data-driver="farina" data-wikipedia="Giuseppe_Farina" alt="Nino Farina, primo campione del mondo di Formula 1" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">IL PRIMO CAMPIONE</span><div class="driver-info"><span class="driver-number">02</span><h3>NINO<br><em>FARINA.</em></h3><span class="driver-detail">CAMPIONE 1950 <b>↗</b></span></div></a>
+        <a class="driver-card" href="?type=driver&id=senna&season=1991"><img data-driver="senna" alt="Ayrton Senna, leggenda della Formula 1" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">IL PILOTA TOTALE · 3 TITOLI</span><div class="driver-info"><span class="driver-number">03</span><h3>AYRTON<br><em>SENNA.</em></h3><span class="driver-detail">BRASILE <b>↗</b></span></div></a>
+        <a class="driver-card" href="?type=driver&id=schumacher&season=2004"><img data-driver="michael_schumacher" alt="Michael Schumacher, sette volte campione del mondo" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">IL DOMINATORE · 7 TITOLI</span><div class="driver-info"><span class="driver-number">04</span><h3>MICHAEL<br><em>SCHUMACHER.</em></h3><span class="driver-detail">GERMANIA <b>↗</b></span></div></a>
+        <a class="driver-card" href="?type=driver&id=hamilton&season=2025"><img data-driver="hamilton" alt="Lewis Hamilton, sette volte campione del mondo" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">LA LEGGENDA VIVENTE</span><div class="driver-info"><span class="driver-number">05</span><h3>LEWIS<br><em>HAMILTON.</em></h3><span class="driver-detail">GRAN BRETAGNA <b>↗</b></span></div></a>
+        <a class="driver-card" href="?type=driver&id=prost&season=1993"><img data-driver="prost" data-wikipedia="Alain_Prost" alt="Alain Prost, quattro volte campione del mondo" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">IL PROFESSORE · 4 TITOLI</span><div class="driver-info"><span class="driver-number">06</span><h3>ALAIN<br><em>PROST.</em></h3><span class="driver-detail">FRANCIA <b>↗</b></span></div></a>
+        <a class="driver-card" href="?type=driver&id=ascari&season=1953"><img data-driver="ascari" data-wikipedia="Alberto_Ascari" alt="Alberto Ascari, campione del mondo 1952 e 1953" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">IL PRIMO DOMINATORE · 2 TITOLI</span><div class="driver-info"><span class="driver-number">07</span><h3>ALBERTO<br><em>ASCARI.</em></h3><span class="driver-detail">ITALIA <b>↗</b></span></div></a>
+        <a class="driver-card" href="?type=driver&id=clark&season=1965"><img data-driver="clark" data-wikipedia="Jim_Clark" alt="Jim Clark, due volte campione del mondo" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">IL GENIO SCOZZESE · 2 TITOLI</span><div class="driver-info"><span class="driver-number">08</span><h3>JIM<br><em>CLARK.</em></h3><span class="driver-detail">SCOZIA <b>↗</b></span></div></a>
+        <a class="driver-card" href="?type=driver&id=villeneuve-g&season=1982"><img data-driver="villeneuve-g" data-wikipedia="Gilles_Villeneuve" alt="Gilles Villeneuve, leggenda Ferrari" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">IL MITO DEL NUMERO 27</span><div class="driver-info"><span class="driver-number">09</span><h3>GILLES<br><em>VILLENEUVE.</em></h3><span class="driver-detail">CANADA <b>↗</b></span></div></a>
+      </div><p class="photo-note">Ritratti da Wikimedia Commons · Ogni foto mostra autore e licenza.</p>
+    </section>
+    <footer><a class="brand" href="#home"><span class="brand-mark">F<span>1</span></span><span class="brand-name">FORMULA <b>ONE</b></span></a><span>DATI: LAP LEDGER / F1DB · CC BY-SA 4.0 · FOTO CON ATTRIBUZIONE INDIVIDUALE</span><a href="https://www.lapledger.org/data" target="_blank" rel="noreferrer">FONTE DATI ↗</a></footer>
+  </main>
+</body>
+</html>
