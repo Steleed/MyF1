@@ -119,7 +119,7 @@
   async function wikipediaPerson(fullName, driverId) {
     for (const language of ['en', 'it']) {
       try {
-        const preferredTitles = { farina: 'Giuseppe Farina', 'villeneuve-g': 'Gilles Villeneuve' };
+        const preferredTitles = { farina: 'Giuseppe Farina', 'villeneuve-g': 'Gilles Villeneuve', antonelli: 'Andrea Kimi Antonelli' };
         const preferredTitle = preferredTitles[driverId];
         const query = fullName + ' Formula One driver';
         const url = preferredTitle
@@ -154,9 +154,15 @@
         ];
         const extraPhotos = driverId === 'villeneuve-g'
           ? await commonsFilePhotos(villeneuveFiles)
-          : await commonsDriverPhotos(fullName, 5);
+          : await commonsDriverPhotos(driverId === 'antonelli' ? 'Andrea Kimi Antonelli portrait' : fullName, driverId === 'antonelli' ? 10 : 5);
+        const relevantPhotos = driverId === 'antonelli'
+          ? extraPhotos.filter(item => /antonelli/i.test(item.title || '')).sort((a, b) => Number(/portrait|head.?shot|interview|paddock/i.test(b.title || '')) - Number(/portrait|head.?shot|interview|paddock/i.test(a.title || '')))
+          : extraPhotos;
+        const profilePhoto = driverId === 'antonelli'
+          ? { thumb_url: 'https://cdn-3.motorsport.com/images/mgl/27vkbNO0/s8/andrea-kimi-antonelli-mercedes.jpg', description_url: 'https://www.motorsport.com/driver/kimi-antonelli/947765/', artist: 'Motorsport.com', licence: '© Motorsport.com' }
+          : photo;
         const seen = new Set();
-        const photos = (driverId === 'villeneuve-g' ? extraPhotos : [photo, ...extraPhotos]).filter(item => {
+        const photos = (driverId === 'villeneuve-g' ? relevantPhotos : [profilePhoto, ...relevantPhotos]).filter(item => {
           if (!item) return false;
           const key = item.description_url || item.thumb_url;
           if (seen.has(key)) return false;
@@ -220,6 +226,72 @@
     } catch {
       return [];
     }
+  }
+
+  async function commonsCategoryPhotos(category) {
+    try {
+      const url = 'https://commons.wikimedia.org/w/api.php?action=query&generator=categorymembers&gcmtitle='
+        + encodeURIComponent('Category:' + category) + '&gcmtype=file&gcmlimit=100&prop=imageinfo'
+        + '&iiprop=url|extmetadata&iiurlwidth=900&format=json&origin=*';
+      const data = await get(url);
+      return Object.values(data.query?.pages || {}).map(page => {
+        const file = page.imageinfo?.[0];
+        if (!file?.thumburl) return null;
+        const metadata = file.extmetadata || {};
+        return {
+          thumb_url: file.thumburl,
+          description_url: file.descriptionurl || '',
+          artist: metadata.Artist?.value?.replace(/<[^>]*>/g, '') || 'Autore non indicato',
+          licence: metadata.LicenseShortName?.value || 'Licenza indicata su Wikimedia Commons',
+          title: page.title || '',
+          category,
+        };
+      }).filter(Boolean);
+    } catch {
+      return [];
+    }
+  }
+
+  function antonelliMomentCaption(photo) {
+    const title = photo.title.replace(/^File:/i, '').replace(/\.[^.]+$/, '');
+    if (/pole position award/i.test(title)) return 'Cina · conquista della pole';
+    if (/post race celebration/i.test(title)) return 'Cina · festa dopo la gara';
+    if (/qualifying top 3/i.test(title)) return 'Cina · top 3 in qualifica';
+    if (/bahrain/i.test(title)) return 'Bahrain · in gara';
+    if (/niederlande|netherlands|dutch grand prix/i.test(title)) return 'Paesi Bassi · Gran Premio di Zandvoort';
+    if (photo.category.includes('Australian')) return 'Australia · weekend di gara';
+    return title.replace(/^2026[ _-]*/i, '').replace(/[_-]+/g, ' ');
+  }
+
+  async function loadAntonelliMoments() {
+    const rail = document.querySelector('#antonelliMoments');
+    const categories = [
+      'Andrea Kimi Antonelli in 2026',
+      'Andrea Kimi Antonelli at the 2026 Australian Grand Prix',
+    ];
+    const groups = await Promise.all(categories.map(commonsCategoryPhotos));
+    const unique = new Map(groups.flat().filter(photo => !/lego/i.test(photo.title)).map(photo => [photo.title, photo]));
+    const photos = [...unique.values()];
+    const priority = [
+      /Pole Position Award/i,
+      /Post Race Celebration/i,
+      /Qualifying Top 3/i,
+      /Bahrain.*Race/i,
+      /Australian Grand Prix/i,
+      /Niederlande|Netherlands/i,
+    ];
+    photos.sort((a, b) => {
+      const rank = photo => {
+        const index = priority.findIndex(pattern => pattern.test(photo.title));
+        return index < 0 ? priority.length : index;
+      };
+      return rank(a) - rank(b);
+    });
+    const items = photos.slice(0, 12).map(photo => {
+      const caption = antonelliMomentCaption(photo);
+      return `<figure class="archive-photo"><a href="${escapeHtml(photo.description_url)}" target="_blank" rel="noreferrer"><img src="${escapeHtml(photo.thumb_url)}" alt="Kimi Antonelli · ${escapeHtml(caption)}" loading="lazy"><span class="photo-kicker">STAGIONE 2026</span><span class="photo-title">${escapeHtml(caption)}</span></a><figcaption><a href="${escapeHtml(photo.description_url)}" target="_blank" rel="noreferrer">${escapeHtml(photo.artist)} · ${escapeHtml(photo.licence)}</a></figcaption></figure>`;
+    });
+    rail.innerHTML = items.length ? items.join('') : '<div class="gallery-error">Foto della stagione 2026 non disponibili al momento.</div>';
   }
 
   function driverPhotoGallery(photos, fullName) {
@@ -327,9 +399,11 @@
           'Gilles Villeneuve 1979 Imola.jpg',
           'Gilles Villeneuve and Riccardo Patrese, Zolder 1979.jpg',
         ];
-        let photo = image.dataset.driver === 'villeneuve-g'
-          ? (await commonsFilePhotos(villeneuveFiles))[0] || null
-          : null;
+        let photo = image.dataset.driver === 'antonelli'
+          ? (await commonsFilePhotos(['2026 Bahrain GP - Mercedes - Kimi Antonelli - Race.jpg']))[0] || null
+          : image.dataset.driver === 'villeneuve-g'
+            ? (await commonsFilePhotos(villeneuveFiles))[0] || null
+            : null;
         if (!photo && image.dataset.driver !== 'villeneuve-g' && result?.pageimage) {
           const commons = await get('https://commons.wikimedia.org/w/api.php?action=query&titles=' + encodeURIComponent('File:' + result.pageimage) + '&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=800&format=json&origin=*');
           const file = Object.values(commons.query?.pages || {})[0]?.imageinfo?.[0];
@@ -401,7 +475,12 @@
     }
     loadHomePhotos();
     loadDriverPortraits();
+    loadAntonelliMoments();
   }
+
+  document.querySelectorAll('.moments-controls button').forEach(button => button.addEventListener('click', () => {
+    document.querySelector('#antonelliMoments').scrollBy({ left: Number(button.dataset.scroll) * 520, behavior: 'smooth' });
+  }));
 
   select.addEventListener('change', () => loadSeason(Number(select.value)));
   document.querySelector('#prevYear').addEventListener('click', () => { if (+select.value > 1950) { select.value = String(+select.value - 1); loadSeason(+select.value); } });
