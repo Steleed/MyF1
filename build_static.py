@@ -12,6 +12,7 @@ def write(name,data):
 now=server.CURRENT_YEAR
 years=[x['year'] for x in server.rows('SELECT year FROM seasons WHERE year BETWEEN 1950 AND ? ORDER BY year DESC',(now,))]
 write('seasons.json',{'years':years})
+write('champions.json',{'items':server.rows("SELECT year,driver_id AS id,entity AS name FROM v_standings_final WHERE table_type='drivers' AND position=1 ORDER BY year")})
 cars=server.rows("SELECT h.id,h.full_name,h.first_year,h.last_year,a.thumb_url,a.description_url,a.artist,a.credit,a.licence,a.licence_url FROM chassis h JOIN article_images a ON a.article=h.article WHERE a.route='article' AND a.thumb_url IS NOT NULL GROUP BY a.description_url ORDER BY h.first_year,h.full_name")
 f2004_rows=server.rows("SELECT h.id,h.full_name,h.first_year,h.last_year,a.thumb_url,a.description_url,a.artist,a.credit,a.licence,a.licence_url FROM chassis h JOIN article_images a ON a.article=h.article WHERE h.id=? AND a.route='article' AND a.thumb_url IS NOT NULL ORDER BY a.description_url LIMIT 1",("ferrari-f2004",))
 f2004=f2004_rows[0] if f2004_rows else None

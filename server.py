@@ -114,6 +114,11 @@ class Handler(SimpleHTTPRequestHandler):
                     "SELECT year FROM seasons WHERE year BETWEEN 1950 AND ? ORDER BY year DESC",
                     (CURRENT_YEAR,),
                 )]})
+            if parts == ["api", "champions"]:
+                return self.send_json({"items": rows(
+                    "SELECT year, driver_id AS id, entity AS name FROM v_standings_final "
+                    "WHERE table_type = 'drivers' AND position = 1 ORDER BY year",
+                )})
             if len(parts) == 3 and parts[1] == "season" and parts[2].isdigit():
                 year = int(parts[2])
                 if not 1950 <= year <= CURRENT_YEAR:

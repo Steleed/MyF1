@@ -16,7 +16,7 @@
 <body>
   <header class="topbar">
     <a class="brand" href="#home" aria-label="Formula One home"><span class="brand-mark">F<span>1</span></span><span class="brand-name">FORMULA <b>ONE</b></span></a>
-    <nav aria-label="Navigazione principale"><a class="active" href="#home">Home</a><a href="#season">Stagioni</a><a href="#cars">Monoposto</a><a href="#momenti">Gare</a><a href="#legends">Piloti</a></nav>
+    <nav aria-label="Navigazione principale"><a class="active" href="#home">Home</a><a href="#season">Stagioni</a><a href="#cars">Monoposto</a><a href="#momenti">Gare</a><a href="#legends">Piloti</a><a href="#games">Minigiochi</a></nav>
     <a class="live-pill" href="#season"><span></span> ARCHIVIO F1</a>
   </header>
   <main id="home">
@@ -46,8 +46,55 @@
       <div class="season-footer"><span>DATI STORICI DAL 1950</span><span>AGGIORNATO A OGNI STAGIONE <b>●</b></span></div>
     </div></section>
 
-    <section class="champion-feature" id="champion-2026"><div class="section-top"><div><div class="eyebrow"><span></span> CAMPIONE DEL MONDO 2026</div><h2>KIMI <em>ANTONELLI.</em></h2></div><span class="photo-count">IL NUOVO CAMPIONE</span></div>
-      <a class="driver-card champion-card" href="?type=driver&id=antonelli&season=2026"><img data-driver="antonelli" data-wikipedia="Andrea_Kimi_Antonelli" alt="Kimi Antonelli alla guida della Mercedes nel Gran Premio del Bahrain 2026" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">ITALIA · CAMPIONE 2026</span><div class="driver-info"><span class="driver-number">12</span><h3>ANDREA KIMI<br><em>ANTONELLI.</em></h3><span class="driver-detail">IL NUOVO CAMPIONE DEL MONDO <b>↗</b></span></div></a>
+    <section class="games-section" id="games" aria-labelledby="gamesTitle">
+      <div class="section-top"><div><div class="eyebrow"><span></span> METTI ALLA PROVA LA MEMORIA</div><h2 id="gamesTitle">MINI<em>GIOCHI.</em></h2></div><span class="photo-count">SFIDE DI FORMULA 1</span></div>
+      <div class="games-grid">
+        <article class="game-card">
+          <div class="eyebrow"><span></span> INDOVINA IL CAMPIONE</div>
+          <label for="championDifficulty">Difficoltà</label>
+          <select class="game-difficulty" id="championDifficulty">
+            <option value="facile">Facile · 10 tentativi</option>
+            <option value="medio">Medio · 5 tentativi</option>
+            <option value="difficile">Difficile · 3 tentativi</option>
+            <option value="impossibile">Impossibile · 1 tentativo</option>
+          </select>
+          <p class="game-prompt">Chi ha vinto il mondiale piloti nel</p>
+          <div class="game-year" id="gameYear" aria-live="polite">—</div>
+          <p class="game-rules" id="gameRules">Se indovini, la partita continua con un altro anno.</p>
+          <form id="championForm">
+            <label for="championGuess">Nome del campione</label>
+            <div class="game-input-row"><input id="championGuess" name="guess" type="text" autocomplete="off" required placeholder="Scrivi il nome del pilota"><button class="primary-button" type="submit">CONFERMA</button></div>
+          </form>
+          <p class="game-feedback" id="gameFeedback" aria-live="polite">Caricamento campioni…</p>
+          <button class="game-suggestion" id="acceptChampionSuggestion" type="button" hidden></button>
+          <button class="game-forfeit" id="forfeitGame" type="button" hidden>FORFAIT · ABBANDONA LA PARTITA</button>
+          <button class="game-next" id="nextGame" type="button" hidden>NUOVO ANNO <span>↗</span></button>
+        </article>
+        <article class="game-card game-leaderboard">
+          <div class="eyebrow"><span></span> SOLO SU QUESTO DISPOSITIVO</div>
+          <h3>LE TUE MIGLIORI <em>SERIE.</em></h3>
+          <ol id="gameScores" class="game-scores"><li class="game-empty">Completa una partita per iniziare la classifica.</li></ol>
+          <section class="last-game" aria-labelledby="lastGameTitle">
+            <div class="eyebrow"><span></span> RIEPILOGO PERSONALE</div>
+            <h3 id="lastGameTitle">ULTIMA PARTITA</h3>
+            <div id="lastGame" class="last-game-content"><p>Completa una partita per vedere qui il riepilogo.</p></div>
+          </section>
+          <p class="game-storage-note" id="gameStorageNote">Risultati salvati nel browser.</p>
+        </article>
+      </div>
+      <article class="game-card prediction-card" aria-labelledby="predictionTitle">
+        <div class="eyebrow"><span></span> PRONOSTICO FUTURO</div>
+        <h3 id="predictionTitle">PREDICI IL <em>CAMPIONE.</em></h3>
+        <p class="game-rules">Pronostica il campione per ogni stagione fino al cambio regolamento. Piloti dal roster 2026.</p>
+        <div id="predictionYears" class="prediction-years" aria-live="polite"><p class="game-feedback">Caricamento piloti…</p></div>
+        <h4 class="prediction-history-title">I TUOI PRONOSTICI</h4>
+        <ol id="predictionHistory" class="prediction-history"><li class="game-empty">Nessun pronostico salvato.</li></ol>
+        <p class="game-storage-note" id="predictionStorageNote">Pronostici salvati nel browser.</p>
+      </article>
+    </section>
+
+    <section class="champion-feature" id="champion-2026"><div class="section-top"><div><div class="eyebrow"><span></span> CAMPIONE DEL MONDO 2026</div><h2>IL NUOVO <em>CAMPIONE.</em></h2></div><span class="photo-count">ANDREA KIMI ANTONELLI</span></div>
+      <a class="driver-card champion-card" href="?type=driver&id=antonelli&season=2026"><img data-driver="antonelli" data-wikipedia="Andrea_Kimi_Antonelli" alt="Kimi Antonelli festeggia il titolo mondiale al Gran Premio del Messico 2026" loading="lazy"><div class="driver-overlay"></div><span class="driver-era">ITALIA · CAMPIONE 2026</span><div class="driver-info"><span class="driver-number">12</span><h3>ANDREA KIMI<br><em>ANTONELLI.</em></h3><span class="driver-detail">IL NUOVO CAMPIONE DEL MONDO <b>↗</b></span></div></a>
       <div class="moments-heading"><span class="eyebrow">I MOMENTI MIGLIORI · STAGIONE 2026</span><div class="moments-controls"><button type="button" data-scroll="-1" aria-label="Scorri foto indietro">←</button><button type="button" data-scroll="1" aria-label="Scorri foto avanti">→</button></div></div>
       <div class="photo-rail champion-moments" id="antonelliMoments" tabindex="0" aria-label="Momenti di Kimi Antonelli nella stagione 2026"><div class="loading">Caricamento foto…</div></div>
     </section>
